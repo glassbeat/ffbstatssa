@@ -6,8 +6,14 @@ from cherrypy import request, response
 # from ffbstatssa import json
 # import logging
 # log = logging.getLogger("ffbstatssa.controllers")
+# dbmechanic
+from ffbstatssa.model import metadata
+from dbsprockets.dbmechanic.frameworks.tg import DBMechanic
+from dbsprockets.saprovider import SAProvider
 
 class Root(controllers.RootController):
+    dbmechanic = DBMechanic(SAProvider(metadata), '/dbmechanic')
+    
     @expose(template="ffbstatssa.templates.welcome")
     # @identity.require(identity.in_group("admin"))
     def index(self):

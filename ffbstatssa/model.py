@@ -18,17 +18,30 @@ from turbogears import identity
 #     Column('my_id', Integer, primary_key=True)
 # )
 
+teams_table = Table('teams', metadata,
+    Column('id', Integer, primary_key=True),
+    Column('name', String),
+    Column('owner', String)
+)
 
 # your model classes
-
 
 # class YourDataClass(object):
 #     pass
 
+class Team(object):
+    def __init__(self, name, owner):
+        self.name = name
+        self.owner = owner
+        
+    def __repr__(self):
+        return "<Team('%s', '%s')>" % (self.name, self.owner)
 
 # set up mappers between your data tables and classes
 
 # mapper(YourDataClass, your_table)
+
+mapper(Team, teams_table)
 
 
 # the identity schema
