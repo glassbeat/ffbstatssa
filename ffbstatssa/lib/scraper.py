@@ -1,9 +1,11 @@
+import cookielib
 import pkg_resources
-pkg_resources.require("BeautifulSoup>=3.0.0")
-from BeautifulSoup import BeautifulSoup
 from urllib import urlencode
 from urllib2 import Request, urlopen, URLError
-import cookielib
+
+pkg_resources.require("BeautifulSoup>=3.0.0")
+from BeautifulSoup import BeautifulSoup
+
 
 class FantasyFootballPageScraper():
     def __init__(self, username, passwd):
@@ -23,8 +25,15 @@ class FantasyFootballPageScraper():
         
         postdata = self._get_postdata()
         self._login(postdata)
-        self.get_ffb_page()
     
+    def _display_url_error(self, e):
+        if hasattr(e, 'reason'):
+            print 'We failed to reach a server.'
+            print 'Reason', e.reason
+        elif hasattr(e, 'code'):
+            print 'The server couldn\'t fulfil the request.'
+            print 'Error code', e.code
+        
     def _get_postdata(self):
         url = 'https://login.yahoo.com/'
         headers = {
@@ -40,12 +49,7 @@ class FantasyFootballPageScraper():
         try:
             response = urlopen(request)
         except URLError, e:
-            if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason', e.reason
-            elif hasattr(e, 'code'):
-                print 'The server couldn\'t fulfil the request.'
-                print 'Error code', e.code
+            self._display_url_error(e)
         else:
             self.cookiejar.extract_cookies(response, request)
             doc = response.readlines()
@@ -80,12 +84,7 @@ class FantasyFootballPageScraper():
         try:
             response = urlopen(request)
         except URLError, e:
-            if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason', e.reason
-            elif hasattr(e, 'code'):
-                print 'The server couldn\'t fulfil the request.'
-                print 'Error code', e.code
+            self._display_url_error(e)
         else:
             self.cookiejar.extract_cookies(response, request)
     
@@ -107,12 +106,7 @@ class FantasyFootballPageScraper():
         try:
             response = urlopen(request)
         except URLError, e:
-            if hasattr(e, 'reason'):
-                print 'We failed to reach a server.'
-                print 'Reason', e.reason
-            elif hasattr(e, 'code'):
-                print 'The server couldn\'t fulfil the request.'
-                print 'Error code', e.code
+            self._display_url_error(e)
         else:
             doc = response.readlines()
             self.soup = BeautifulSoup(''.join(doc))
