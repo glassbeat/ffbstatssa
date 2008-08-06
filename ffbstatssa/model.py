@@ -8,7 +8,7 @@ from sqlalchemy.orm import relation
 # import some datatypes for table columns from SQLAlchemy
 # (see http://www.sqlalchemy.org/docs/04/types.html for more)
 from sqlalchemy import String, Unicode, Integer, DateTime
-from ffbstatssa.lib import identity
+from ffbstatssa.lib.identity import *
 
 
 # your data tables
