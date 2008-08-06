@@ -6,8 +6,7 @@ from urllib2 import Request, urlopen, URLError
 import cookielib
 
 class FantasyFootballPageScraper():
-    def __init__(self):
-
+    def __init__(self, username, passwd):
         self.USER_AGENT = ('Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; '
                       'rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1')
         self.ACCEPT = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
@@ -17,14 +16,14 @@ class FantasyFootballPageScraper():
         self.CONNECTION = 'keep-alive'
         self.CONTENT_TYPE = 'application/x-www-form-urlencoded'
         
-        self.username = None
-        self.passwd = None
-        
+        self.username = username
+        self.passwd = passwd        
         self.cookiejar = cookielib.CookieJar()
         self.soup = None
         
         postdata = self._get_postdata()
         self._login(postdata)
+        self.get_ffb_page()
     
     def _get_postdata(self):
         url = 'https://login.yahoo.com/'
@@ -90,8 +89,8 @@ class FantasyFootballPageScraper():
         else:
             self.cookiejar.extract_cookies(response, request)
     
-    def get_ffb_page(self):
-        url = 'http://football.fantasysports.yahoo.com/f2/5973'
+    def get_ffb_page(self, page='/f2/5973'):
+        url = ''.join(['http://football.fantasysports.yahoo.com', page])
         headers = {
             'Host' : 'football.fantasysports.yahoo.com',
             'User-Agent' : self.USER_AGENT,
@@ -120,5 +119,4 @@ class FantasyFootballPageScraper():
 
 if __name__ == '__main__':
     scraper = FantasyFootballPageScraper()
-    scraper.get_ffb_page()
     print scraper.soup.prettify()
