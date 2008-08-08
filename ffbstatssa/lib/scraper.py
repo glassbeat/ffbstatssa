@@ -8,7 +8,7 @@ from BeautifulSoup import BeautifulSoup
 
 
 class FantasyFootballPageScraper():
-    def __init__(self, username, passwd):
+    def __init__(self, username, passwd, league_path):
         self.USER_AGENT = ('Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; '
                       'rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1')
         self.ACCEPT = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
@@ -19,7 +19,8 @@ class FantasyFootballPageScraper():
         self.CONTENT_TYPE = 'application/x-www-form-urlencoded'
         
         self.username = username
-        self.passwd = passwd        
+        self.passwd = passwd
+        self.league_path = league_path
         self.cookiejar = cookielib.CookieJar()
         self.soup = None
         
@@ -88,8 +89,8 @@ class FantasyFootballPageScraper():
         else:
             self.cookiejar.extract_cookies(response, request)
     
-    def get_ffb_page(self, page='/f2/5973'):
-        url = ''.join(['http://football.fantasysports.yahoo.com', page])
+    def get_ffb_page(self, page):
+        url = ''.join(['http://football.fantasysports.yahoo.com', self.league_path, page])
         headers = {
             'Host' : 'football.fantasysports.yahoo.com',
             'User-Agent' : self.USER_AGENT,
@@ -112,5 +113,4 @@ class FantasyFootballPageScraper():
             self.soup = BeautifulSoup(''.join(doc))
 
 if __name__ == '__main__':
-    scraper = FantasyFootballPageScraper()
-    print scraper.soup.prettify()
+    pass
