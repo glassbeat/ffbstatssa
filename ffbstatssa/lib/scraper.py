@@ -111,6 +111,7 @@ class FantasyFootballPageScraper():
         else:
             doc = response.readlines()
             self.soup = BeautifulSoup(''.join(doc))
+            return self.soup
 
 if __name__ == '__main__':
     pass
