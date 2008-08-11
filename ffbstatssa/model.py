@@ -50,12 +50,36 @@ games_teams_table = Table('games_teams', metadata,
 
 # model classes
 class Team(object):
-    def __init__(self, name, owner):
+    def __init__(self, name, owner, scores):
         self.name = name
         self.owner = owner
+        self.scores = scores
         
     def __repr__(self):
         return "<Team('%s', '%s')>" % (self.name, self.owner)
+    
+    def total_points(self):
+        total_points = 0
+        for score in self.scores:
+            total_points += score.score
+        return total_points
+    total_points = property(total_points)
+    
+    def total_possible_points(self):
+        total_possible_points = 0
+        for score in self.scores:
+            total_possible_points += score.possible_score
+        return total_possible_points
+    total_possible_points = property(total_possible_points)
+    
+    def efficiency(self):
+        result = 0
+        if self.total_possible_points > 0:
+            result = float(self.total_points) / float(self.total_possible_points)
+        else:
+            result = 0
+        return result
+    efficiency = property(efficiency)
 
 class Score(object):
     def __init__(self, score, possible_score, team):

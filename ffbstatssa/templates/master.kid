@@ -30,7 +30,7 @@
         </span>
     </div>
 
-    <div id="header">&#160;</div>
+    <div id="header">DeKalb Football League Stats</div>
 
     <div id="main_content">
         <div id="status_block" class="flash"
@@ -39,11 +39,6 @@
     </div>
 
     <div id="footer">
-        <img src="${tg.url('/static/images/under_the_hood_blue.png')}"
-            alt="TurboGears under the hood" />
-        <p>TurboGears is a open source front-to-back web development framework
-            written in Python</p>
-        <p>Copyright &#169; 2007 Kevin Dangoor</p>
     </div>
 </body>
 
