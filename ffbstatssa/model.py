@@ -50,16 +50,42 @@ games_teams_table = Table('games_teams', metadata,
 
 # model classes
 class Team(object):
-    pass
+    def __init__(self, name, owner):
+        self.name = name
+        self.owner = owner
+        
+    def __repr__(self):
+        return "<Team('%s', '%s')>" % (self.name, self.owner)
 
 class Score(object):
-    pass
+    def __init__(self, score, possible_score, team):
+        self.score = score
+        self.possible_score = possible_score
+        self.team = team
+        
+    def __repr__(self):
+        return "<Score('%s', '%s', '%s')>" % (
+            self.score, self.possible_score, self.team.name
+        )
 
 class Week(object):
-    pass
+    def __init__(self, week_num, comments):
+        self.week_num = week_num
+        self.comments = comments
+        
+    def __repr__(self):
+        return "<Week('%s', '%s')>" % (self.week_num, self.comments)
 
 class Game(object):
-    pass
+    def __init__(self, week, teams, scores):
+        self.week = week
+        self.teams = teams
+        self.scores = scores
+        
+    def __repr__(self):
+        return "<Game('%s', '%s', '%s')>" % (
+            self.week, self.teams, self.scores
+        )
 
 # mappers between data tables and classes
 mapper(Team, teams_table)
