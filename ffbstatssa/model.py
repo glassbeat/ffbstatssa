@@ -11,48 +11,72 @@ from sqlalchemy import String, Unicode, Integer, DateTime
 from ffbstatssa.lib.identity import *
 
 
-# your data tables
-
-# your_table = Table('yourtable', metadata,
-#     Column('my_id', Integer, primary_key=True)
-# )
-
+# data tables
 teams_table = Table('teams', metadata,
     Column('id', Integer, primary_key=True),
     Column('name', String),
-    Column('owner', String)
+    Column('owner', String),
 )
 
 scores_table = Table('scores', metadata,
     Column('id', Integer, primary_key=True),
     Column('score', Integer),
-    Column('possible_score', Integer)
+    Column('possible_score', Integer),
+    Column('team_id', Integer, ForeignKey('teams.id')),
 )
 
-# your model classes
+weeks_table = Table('weeks', metadata,
+    Column('id', Integer, primary_key=True),
+    Column('week_num', Integer),
+    Column('comments', String),
+)
 
-# class YourDataClass(object):
-#     pass
-
-class Team(object):
-    def __init__(self, name, owner):
-        self.name = name
-        self.owner = owner
-        
-    def __repr__(self):
-        return "<Team('%s', '%s')>" % (self.name, self.owner)
+games_table = Table('games', metadata,
+    Column('id', Integer, primary_key=True),
+    Column('week_id', Integer, ForeignKey('weeks.id')),
+)
     
+games_scores_table = Table('games_scores', metadata,
+    Column('id', Integer, primary_key=True),
+    Column('game_id', Integer, ForeignKey('games.id')),
+    Column('score_id', Integer, ForeignKey('scores.id'))
+)
+
+games_teams_table = Table('games_teams', metadata,
+    Column('id', Integer, primary_key=True),
+    Column('team_id', Integer, ForeignKey('teams.id')),
+    Column('game_id', Integer, ForeignKey('games.id')),
+)
+
+# model classes
+class Team(object):
+    pass
+
 class Score(object):
-    def __init__(self, score, possible_score):
-        self.score = score
-        self.possible_score = possible_score
-        
-    def __repr__(self):
-        return "<Score('%s', '%s')>" % (self.score, self.possible_score)
+    pass
 
-# set up mappers between your data tables and classes
+class Week(object):
+    pass
 
-# mapper(YourDataClass, your_table)
+class Game(object):
+    pass
 
+# mappers between data tables and classes
 mapper(Team, teams_table)
-mapper(Score, scores_table)
+mapper(Score, scores_table,
+       properties={
+           'team' : relation(
+               Team, backref='scores')
+       }
+)
+mapper(Week, weeks_table)
+mapper(Game, games_table,
+       properties={
+           'week' : relation(
+               Week, backref='games'),
+           'scores' : relation(
+               Score, secondary=games_scores_table, backref='game'),
+           'teams' : relation(
+               Team, secondary=games_teams_table, backref='games'),
+       }
+)
