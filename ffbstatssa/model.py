@@ -80,6 +80,36 @@ class Team(object):
             result = 0
         return result
     efficiency = property(efficiency)
+    
+    def wins(self):
+        result = 0
+        for game in self.games:
+            our_score = 0
+            their_score = 0
+            for score in game.scores:
+                if score.team == self:
+                    our_score = score.score
+                else:
+                    their_score = score.score
+            if our_score > their_score:
+                result += 1
+        return result
+    wins = property(wins)
+    
+    def losses(self):
+        result = 0
+        for game in self.games:
+            our_score = 0
+            their_score = 0
+            for score in game.scores:
+                if score.team == self:
+                    our_score = score.score
+                else:
+                    their_score = score.score
+            if our_score < their_score:
+                result += 1
+        return result
+    losses = property(losses)
 
 class Score(object):
     def __init__(self, score, possible_score, team):
@@ -107,8 +137,13 @@ class Game(object):
         self.scores = scores
         
     def __repr__(self):
+        teams = []
+        scores = []
+        for score in self.scores:
+            teams.append(score.team.name)
+            scores.append(score.score)
         return "<Game('%s', '%s', '%s')>" % (
-            self.week, self.teams, self.scores
+            self.week.week_num, teams, scores
         )
 
 # mappers between data tables and classes

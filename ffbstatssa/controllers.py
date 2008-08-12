@@ -11,6 +11,7 @@ class Root(controllers.RootController):
     @expose(template="ffbstatssa.templates.welcome")
     @paginate('data', limit=12, default_order=(
         'name', '-efficiency', '-total_points', '-total_possible_points',
+        '-wins', '-losses'
     ))
     # @identity.require(identity.in_group("admin"))
     def index(self):

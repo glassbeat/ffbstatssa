@@ -35,6 +35,14 @@ teams_datagrid = PaginateDataGrid(
                                         (teams.efficiency * 100), 2)), "%"])), 
                                 'Efficiency',
                                 options=dict(sortable=True)),
+        PaginateDataGrid.Column('wins',
+                                'wins',
+                                'W',
+                                options=dict(sortable=True)),
+        PaginateDataGrid.Column('losses',
+                                'losses',
+                                'L',
+                                options=dict(sortable=True)),
     ]
 )
 

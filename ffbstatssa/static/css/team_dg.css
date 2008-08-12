@@ -16,7 +16,7 @@
 .grid .column_chooser_list a:hover {background-color:#cdcdcd;}
 .grid .column_chooser_list {padding:0;margin:0;list-style:none;background-color:#e3e3e3;}
 
-/*
+
 #team_list th {text-align: center;}
 #team_list th.col_0 {text-align: left;}
 #team_list th.col_1 {text-align: left;}
@@ -25,8 +25,10 @@
 #team_list th.col_4 {width:10%;}
 #team_list th.col_5 {width:4%;}
 #team_list th.col_6 {width:4%;}
-#team_list th.col_7 {width:4%;}
-#team_list th.col_8 {width:4%;}
 #team_list td {text-align: right;}
 #team_list td.col_0, #team_list td.col_1 {text-align: left;}
+/*
+#team_list th.col_7 {width:4%;}
+#team_list th.col_8 {width:4%;}
+
 */
