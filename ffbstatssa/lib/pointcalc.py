@@ -14,16 +14,10 @@ def strip_crap(soup):
         style.extract()
 
 if __name__ == '__main__':
+    pattern1 = re.compile('last')
+    pattern2 = re.compile('pts')
     strip_crap(soup)
     stat_table1 = soup.find('table', attrs={'id' : 'statTable1'})
-    pattern = re.compile('((odd|even) first)|(odd$|even$)')
-    rows = stat_table1.findAll('tr', attrs={'class' : pattern})
-    stats = []
-    for row in rows:
-        position = row.find('td', attrs={'class' : 'pos first'}).contents[0]
-        player = row.find('td', attrs={'class' : 'player'})
-        player = player.contents[0].contents[0].contents[0]
-        points = row.find('td', attrs={'class' : 'pts stat last'}).contents[0]
-        stats.append([position, player, points])
-    for stat in stats:
-        print stat
+    total_row = stat_table1.find('tr', attrs={'class' : pattern1})
+    total_pts = total_row.find('td', attrs={'class' : pattern2}).contents[0]
+    print total_pts
