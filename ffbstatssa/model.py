@@ -7,7 +7,7 @@ from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.orm import relation
 # import some datatypes for table columns from SQLAlchemy
 # (see http://www.sqlalchemy.org/docs/04/types.html for more)
-from sqlalchemy import String, Unicode, Integer, DateTime
+from sqlalchemy import String, Unicode, Integer, DateTime, Float
 from ffbstatssa.lib.identity import *
 
 
@@ -20,8 +20,8 @@ teams_table = Table('teams', metadata,
 
 scores_table = Table('scores', metadata,
     Column('id', Integer, primary_key=True),
-    Column('score', Integer),
-    Column('possible_score', Integer),
+    Column('score', Float),
+    Column('possible_score', Float),
     Column('team_id', Integer, ForeignKey('teams.id')),
 )
 
@@ -39,7 +39,7 @@ games_table = Table('games', metadata,
 games_scores_table = Table('games_scores', metadata,
     Column('id', Integer, primary_key=True),
     Column('game_id', Integer, ForeignKey('games.id')),
-    Column('score_id', Integer, ForeignKey('scores.id'))
+    Column('score_id', Integer, ForeignKey('scores.id')),
 )
 
 games_teams_table = Table('games_teams', metadata,
@@ -48,8 +48,18 @@ games_teams_table = Table('games_teams', metadata,
     Column('game_id', Integer, ForeignKey('games.id')),
 )
 
+opponents_table = Table('opponents', metadata,
+    Column('id', Integer, primary_key=True),
+    Column('score01_id', Integer, ForeignKey('scores.id')),
+    Column('score02_id', Integer, ForeignKey('scores.id')),
+)
+
 # model classes
 class Team(object):
+    '''
+    Attributes:
+    name, owner, scores, games, total_points, total_possible_points, efficiency, wins, losses
+    '''
     def __init__(self, name, owner, scores):
         self.name = name
         self.owner = owner
@@ -151,7 +161,7 @@ mapper(Team, teams_table)
 mapper(Score, scores_table,
        properties={
            'team' : relation(
-               Team, backref='scores')
+               Team, backref='scores'),
        }
 )
 mapper(Week, weeks_table)
