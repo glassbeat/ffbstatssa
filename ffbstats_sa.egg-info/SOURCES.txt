@@ -15,6 +15,10 @@ ffbstatssa/json.py
 ffbstatssa/model.py
 ffbstatssa/release.py
 ffbstatssa/config/__init__.py
+ffbstatssa/lib/__init__.py
+ffbstatssa/lib/config_scraper.py
+ffbstatssa/lib/datagrids.py
+ffbstatssa/lib/identity.py
 ffbstatssa/templates/__init__.py
 ffbstatssa/tests/__init__.py
 ffbstatssa/tests/test_controllers.py
