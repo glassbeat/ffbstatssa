@@ -23,6 +23,7 @@ scores_table = Table('scores', metadata,
     Column('score', Float),
     Column('possible_score', Float),
     Column('team_id', Integer, ForeignKey('teams.id')),
+    Column('opponent_score_id', Integer, ForeignKey('scores.id')),
 )
 
 weeks_table = Table('weeks', metadata,
@@ -46,12 +47,6 @@ games_teams_table = Table('games_teams', metadata,
     Column('id', Integer, primary_key=True),
     Column('team_id', Integer, ForeignKey('teams.id')),
     Column('game_id', Integer, ForeignKey('games.id')),
-)
-
-opponents_table = Table('opponents', metadata,
-    Column('id', Integer, primary_key=True),
-    Column('score01_id', Integer, ForeignKey('scores.id')),
-    Column('score02_id', Integer, ForeignKey('scores.id')),
 )
 
 # model classes
@@ -99,8 +94,7 @@ class Team(object):
             for score in game.scores:
                 if score.team == self:
                     our_score = score.score
-                else:
-                    their_score = score.score
+                    their_score = score.opponent_score
             if our_score > their_score:
                 result += 1
         return result
@@ -114,8 +108,7 @@ class Team(object):
             for score in game.scores:
                 if score.team == self:
                     our_score = score.score
-                else:
-                    their_score = score.score
+                    their_score = score.opponent_score
             if our_score < their_score:
                 result += 1
         return result
@@ -162,6 +155,8 @@ mapper(Score, scores_table,
        properties={
            'team' : relation(
                Team, backref='scores'),
+           'opponent_score' : relation(
+               Score, backref='scores', uselist=False),
        }
 )
 mapper(Week, weeks_table)
