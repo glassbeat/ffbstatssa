@@ -10,7 +10,7 @@ from BeautifulSoup import BeautifulSoup
 class FantasyFootballPageScraper():
     def __init__(self, username, passwd, league_path):
         self.USER_AGENT = ('Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; '
-                      'rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1')
+            'rv:1.9.0.1) Gecko/2008070208 Firefox/3.0.1')
         self.ACCEPT = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
         self.ACCEPT_LANGUAGE = 'en-us,en;q=0.5'
         self.ACCEPT_CHARSET = 'ISO-8859-1,utf-8;q=0.7,*;q=0.7'
@@ -22,10 +22,18 @@ class FantasyFootballPageScraper():
         self.passwd = passwd
         self.league_path = league_path
         self.cookiejar = cookielib.CookieJar()
-        self.soup = None
         
         postdata = self._get_postdata()
         self._login(postdata)
+        
+        self.DEFAULT_HEADERS = {
+            'User-Agent' : self.USER_AGENT,
+            'Accept' : self.ACCEPT,
+            'Accept-Language' : self.ACCEPT_LANGUAGE,
+            'Accept-Charset' : self.ACCEPT_CHARSET,
+            'Keep-Alive' : self.KEEP_ALIVE,
+            'Connection' : self.CONNECTION,
+        }
     
     def _display_url_error(self, e):
         if hasattr(e, 'reason'):
@@ -37,15 +45,9 @@ class FantasyFootballPageScraper():
         
     def _get_postdata(self):
         url = 'https://login.yahoo.com/'
-        headers = {
-            'Host' : 'login.yahoo.com',
-            'User-Agent' : self.USER_AGENT,
-            'Accept' : self.ACCEPT,
-            'Accept-Language' : self.ACCEPT_LANGUAGE,
-            'Accept-Charset' : self.ACCEPT_CHARSET,
-            'Keep-Alive' : self.KEEP_ALIVE,
-            'Connection' : self.CONNECTION
-        }
+        headers = self.DEFAULT_HEADERS
+        headers['Host'] = 'login.yahoo.com'
+        
         request = Request(url, headers=headers)
         try:
             response = urlopen(request)
@@ -65,18 +67,11 @@ class FantasyFootballPageScraper():
         
     def _login(self, data):
         url = 'https://login.yahoo.com/config/login'
-        headers = {
-            'Host' : 'login.yahoo.com',
-            'Referer' : 'https://login.yahoo.com/',
-            'User-Agent' : self.USER_AGENT,
-            'Accept' : self.ACCEPT,
-            'Accept-Language' : self.ACCEPT_LANGUAGE,
-            'Accept-Charset' : self.ACCEPT_CHARSET,
-            'Keep-Alive' : self.KEEP_ALIVE,
-            'Connection' : self.CONNECTION,
-            'Content-Type' : self.CONTENT_TYPE,
-            'Content-Length' : len(data)
-        }
+        headers = self.DEFAULT_HEADERS
+        headers['Host'] = 'login.yahoo.com'
+        headers['Referer'] = 'https://login.yahoo.com/'
+        headers['Content-Type'] = self.CONTENT_TYPE
+        headers['Content-Length'] = len(data)
 
         request = Request(url, data, headers)
         self.cookiejar.add_cookie_header(request)
@@ -91,15 +86,8 @@ class FantasyFootballPageScraper():
     
     def get_ffb_page(self, page):
         url = ''.join(['http://football.fantasysports.yahoo.com', self.league_path, page])
-        headers = {
-            'Host' : 'football.fantasysports.yahoo.com',
-            'User-Agent' : self.USER_AGENT,
-            'Accept' : self.ACCEPT,
-            'Accept-Language' : self.ACCEPT_LANGUAGE,
-            'Accept-Charset' : self.ACCEPT_CHARSET,
-            'Keep-Alive' : self.KEEP_ALIVE,
-            'Connection' : self.CONNECTION
-        }
+        headers = self.DEFAULT_HEADERS
+        headers['Host'] = 'football.fantasysports.yahoo.com'
         
         request = Request(url, headers=headers)
         self.cookiejar.add_cookie_header(request)
@@ -110,8 +98,8 @@ class FantasyFootballPageScraper():
             self._display_url_error(e)
         else:
             doc = response.readlines()
-            self.soup = BeautifulSoup(''.join(doc))
-            return self.soup
+            soup = BeautifulSoup(''.join(doc))
+            return soup
 
 if __name__ == '__main__':
     pass
