@@ -1,21 +1,24 @@
 import turbogears as tg
-from turbogears import controllers, expose, flash
-# from ffbstatssa import model
-from turbogears import identity, redirect
+from turbogears import (controllers, expose, flash, identity, redirect,
+                        paginate)
+from turbogears.database import session
 from cherrypy import request, response
-# from ffbstatssa import json
-# import logging
-# log = logging.getLogger("ffbstatssa.controllers")
+
+from ffbstatssa.model import Team, Score, Game, Week
+from ffbstatssa.lib import datagrids
 
 class Root(controllers.RootController):    
     @expose(template="ffbstatssa.templates.welcome")
+    @paginate('data', limit=12, default_order=(
+        'name', '-efficiency', '-total_points', '-total_possible_points',
+        '-wins', '-losses'
+    ))
     # @identity.require(identity.in_group("admin"))
     def index(self):
-        import time
-        # log.debug("Happy TurboGears Controller Responding For Duty")
-        flash("Your application is now running")
-        return dict(now=time.ctime())
-
+        teams = session.query(Team)
+        return dict(data=teams, datagrid=datagrids.teams_datagrid)
+    
+    # identity urls
     @expose(template="ffbstatssa.templates.login")
     def login(self, forward_url=None, previous_url=None, *args, **kw):
 
