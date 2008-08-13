@@ -1,13 +1,19 @@
 import turbogears as tg
 from turbogears import (controllers, expose, flash, identity, redirect,
-                        paginate)
+    paginate)
 from turbogears.database import session
 from cherrypy import request, response
 
 from ffbstatssa.model import Team, Score, Game, Week
 from ffbstatssa.lib import datagrids
 
-class Root(controllers.RootController):    
+from turbogears.database import metadata
+from dbsprockets.dbmechanic.frameworks.tg.dbmechanic import (
+    DBMechanic, SAProvider)
+
+class Root(controllers.RootController):
+    dbmechanic = DBMechanic(SAProvider(metadata), '/dbmechanic') 
+    
     @expose(template="ffbstatssa.templates.welcome")
     @paginate('data', limit=12, default_order=(
         'name', '-efficiency', '-total_points', '-total_possible_points',
