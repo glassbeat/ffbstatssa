@@ -4,25 +4,27 @@ from turbogears import (controllers, expose, flash, identity, redirect,
 from turbogears.database import session
 from cherrypy import request, response
 
+import tw
+
 from ffbstatssa.model import Team, Score, Game, Week
 from ffbstatssa.lib import datagrids
 
-from turbogears.database import metadata
-from dbsprockets.dbmechanic.frameworks.tg.dbmechanic import (
-    DBMechanic, SAProvider)
+#from turbogears.database import metadata
+#from dbsprockets.dbmechanic.frameworks.tg.dbmechanic import (
+#    DBMechanic, SAProvider)
 
 class Root(controllers.RootController):
-    dbmechanic = DBMechanic(SAProvider(metadata), '/dbmechanic') 
+#    dbmechanic = DBMechanic(SAProvider(metadata), '/dbmechanic') 
     
     @expose(template="ffbstatssa.templates.welcome")
-    @paginate('data', limit=12, default_order=(
+    @paginate('dg_data', limit=12, default_order=(
         'name', '-efficiency', '-total_points', '-total_possible_points',
         '-wins', '-losses'
     ))
     # @identity.require(identity.in_group("admin"))
     def index(self):
         teams = session.query(Team)
-        return dict(data=teams, datagrid=datagrids.teams_datagrid)
+        return dict(dg_data=teams, datagrid=datagrids.teams_datagrid)
     
     # identity urls
     @expose(template="ffbstatssa.templates.login")

@@ -46,6 +46,12 @@ a.link, a, a.active {
   padding: 10px;
 }
 
+#pageLogin {
+  font-size: 10px;
+  font-family: verdana;
+  text-align: right;
+}
+
 #sidebar {
   border: 1px solid #aaa;
   background-color: #eee;
