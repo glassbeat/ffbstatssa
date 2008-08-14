@@ -9,12 +9,12 @@ import tw
 from ffbstatssa.model import Team, Score, Game, Week
 from ffbstatssa.lib import datagrids
 
-#from turbogears.database import metadata
-#from dbsprockets.dbmechanic.frameworks.tg.dbmechanic import (
-#    DBMechanic, SAProvider)
+from turbogears.database import metadata
+from dbsprockets.dbmechanic.frameworks.tg.dbmechanic import (
+    DBMechanic, SAProvider)
 
 class Root(controllers.RootController):
-#    dbmechanic = DBMechanic(SAProvider(metadata), '/dbmechanic') 
+    dbmechanic = DBMechanic(SAProvider(metadata), '/dbmechanic') 
     
     @expose(template="ffbstatssa.templates.welcome")
     @paginate('dg_data', limit=12, default_order=(
